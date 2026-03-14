@@ -1,0 +1,39 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Build the Docker image
+      - name: Build image with bootBuildImage
+        run: ./gradlew bootBuildImage -PdockerImageTag=latest
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+
+      # Tag the image for Docker Hub
+      - name: Tag Docker image
+        run: docker tag bnb-diploma-config-server:latest ${{ secrets.DOCKER_HUB_USERNAME }}/bnb-diploma-config-server:latest
+
+      # Push the image
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/bnb-diploma-config-server:latest
