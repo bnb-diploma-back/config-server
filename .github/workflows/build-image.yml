@@ -21,9 +21,6 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build and unpack JAR
-        run: ./gradlew bootJar unpack
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
