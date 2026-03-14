@@ -10,18 +10,6 @@ version = '0.0.1-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
-bootBuildImage {
-    if (!project.hasProperty("dockerImageTag")) {
-        ext.dockerImageTag = "latest"
-    }
-
-    builder = "paketobuildpacks/builder-jammy-base"
-    createdDate = "now"
-    imageName = "bnb-diploma-config-server:${dockerImageTag}"
-    environment = ["BP_NATIVE_IMAGE": "false",
-                   "BP_JVM_VERSION" : "25"]
-}
 ext {
     set('springCloudVersion', "2025.0.0")
 }
