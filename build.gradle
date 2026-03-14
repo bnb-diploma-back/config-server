@@ -16,7 +16,7 @@ bootBuildImage {
         ext.dockerImageTag = "latest"
     }
 
-    builder = "paketobuildpacks/builder-jammy-tiny"
+    builder = "paketobuildpacks/builder-jammy-base"
     createdDate = "now"
     imageName = "bnb-diploma-config-server:${dockerImageTag}"
     environment = ["BP_NATIVE_IMAGE": "false",
