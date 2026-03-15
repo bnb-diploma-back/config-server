@@ -1,8 +1,22 @@
 plugins {
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '4.0.3'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
 }
+
+
+bootBuildImage {
+    if (!project.hasProperty("dockerImageTag")) {
+        ext.dockerImageTag = "latest"
+    }
+
+    builder = "paketobuildpacks/builder-jammy-tiny"
+    createdDate = "now"
+    imageName = "bnb-diploma-config-server:${dockerImageTag}"
+    environment = ["BP_NATIVE_IMAGE": "false",
+                   "BP_JVM_VERSION" : "25"]
+}
+
 
 group = 'org.example'
 version = '0.0.1-SNAPSHOT'
@@ -11,7 +25,7 @@ repositories {
     mavenCentral()
 }
 ext {
-    set('springCloudVersion', "2025.0.0")
+    set('springCloudVersion', "2025.1.1")
 }
 
 dependencies {
@@ -27,4 +41,9 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+}
+
+task unpack(type: Copy) {
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
 }
